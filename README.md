@@ -2,7 +2,6 @@
 
 A senior-level, highly animated developer portfolio built with the latest modern web tech stack. This project was migrated from a standard Vite setup to a professional **Next.js 15 App Router** architecture with a focus on "perfect" design, smooth micro-interactions, and 3D effects.
 
-![Portfolio Preview](public/ecommerce.png) *(Note: Add a high-res screenshot here)*
 
 ## 🚀 Key Features
 
