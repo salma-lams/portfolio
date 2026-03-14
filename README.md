@@ -64,3 +64,4 @@ This project is open-source. Feel free to use and modify it for your own portfol
 
 ---
 Built with 💛 by [Salma](https://github.com/salma-lams)
+*Last updated: March 14, 2026*
