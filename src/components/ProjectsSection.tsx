@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import TiltCard from "@/components/TiltCard";
 
 const categories = [
   { key: "all", label: "All" },
@@ -140,8 +139,8 @@ export default function ProjectsSection() {
         >
           <AnimatePresence mode="popLayout">
             {filtered.map((project, idx) => (
-              <TiltCard key={project.title} className="flex flex-col h-full" intensity={10}>
-                <motion.article
+              <motion.article
+                key={project.title}
                   layout
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ 
@@ -219,7 +218,6 @@ export default function ProjectsSection() {
                     </div>
                   </div>
                 </motion.article>
-              </TiltCard>
             ))}
           </AnimatePresence>
         </motion.div>

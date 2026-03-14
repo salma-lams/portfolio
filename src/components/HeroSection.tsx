@@ -6,9 +6,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { CountUp } from "@/components/CountUp";
 
-// Three.js must be dynamically imported (no SSR)
-const ParticleBackground = dynamic(() => import("@/components/ParticleBackground"), { ssr: false });
-const FloatingObject = dynamic(() => import("@/components/FloatingObject"), { ssr: false });
+// No 3D imports
 
 const stats = [
   { label: "Projects Built", end: 6, suffix: "+" },
@@ -38,11 +36,7 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen w-full flex items-center overflow-hidden py-24 px-5 sm:px-8 lg:px-12">
-      {/* ── 3D Particle background ─────────────────────────────────────── */}
-      <ParticleBackground />
-
-      {/* ── Floating 3D decoration (top right, desktop only) ──────────── */}
-      <FloatingObject />
+      {/* No 3D backgrounds */}
 
       {/* ── Soft ambient glow under particles ────────────────────────── */}
       <div className="pointer-events-none absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-yellow-400/10 rounded-full blur-[140px]" />
@@ -142,12 +136,7 @@ export default function HeroSection() {
           style={{ y: imageY }}
           className="relative flex justify-center order-1 lg:order-2"
         >
-          {/* Rotating ring */}
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-0 w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 m-auto rounded-full border border-dashed border-yellow-400/20"
-          />
+          {/* No rotating ring */}
 
           {/* Outer glow */}
           <motion.div
