@@ -3,134 +3,159 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import ThemeToggle from "@/components/ThemeToggle";
+import { cvData } from "@/data/cv";
 
-const links = [
-  { href: "/", label: "Home" },
+const navItems = [
   { href: "/#about", label: "About" },
   { href: "/#projects", label: "Projects" },
   { href: "/#contact", label: "Contact" },
-  { href: "/customize", label: "Hire Me" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => { setMobileOpen(false); }, [pathname]);
-
-  // Prevent body scroll when mobile menu open
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [mobileOpen]);
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Handle escape key to close mobile menu
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileMenuOpen]);
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      {/* Accessible skip link */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-60 focus:px-4 focus:py-2 focus:bg-amber-500 focus:text-neutral-900 focus:font-bold focus:rounded focus:outline-none"
+      >
+        Skip to main content
+      </a>
+
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 border-b ${
           scrolled
-            ? "bg-[#0b0f19]/85 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
-            : "bg-transparent"
+            ? "bg-white/90 dark:bg-[#0b0f19]/90 backdrop-blur-md border-neutral-200 dark:border-neutral-800 shadow-xs"
+            : "bg-white/60 dark:bg-[#0b0f19]/60 backdrop-blur-xs border-transparent"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 h-16 flex justify-between items-center">
-          {/* LOGO */}
-          <Link href="/" className="group relative z-10 text-xl font-extrabold tracking-wide text-white">
-            <span className="text-yellow-400 group-hover:text-yellow-300 transition-colors duration-300">Salma</span>
-            Dev
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+          
+          {/* Logo / Name */}
+          <Link
+            href="/"
+            className="text-base font-bold tracking-tight text-neutral-900 dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors focus-visible:outline-2 focus-visible:outline-amber-500 rounded"
+          >
+            {cvData.name}{" "}
+            <span className="text-xs font-mono font-normal text-neutral-500 dark:text-neutral-400">
+              / Full-Stack
+            </span>
           </Link>
 
-          {/* DESKTOP NAV */}
-          <nav className="hidden md:flex gap-8 items-center">
-            {links.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="relative group text-sm font-medium tracking-wide transition-colors duration-200 text-gray-400 hover:text-white"
-                >
-                  {link.label}
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-indicator"
-                      className="absolute -bottom-1 left-0 right-0 h-[2px] bg-yellow-400 rounded-full"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-yellow-400/60 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-                </Link>
-              );
-            })}
+          {/* Desktop Navigation */}
+          <nav aria-label="Main Navigation" className="hidden md:flex items-center gap-6">
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-amber-500 rounded"
+              >
+                {item.label}
+              </Link>
+            ))}
+
+            <a
+              href={cvData.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-amber-500 rounded"
+            >
+              GitHub
+            </a>
+
+            <div className="w-px h-4 bg-neutral-300 dark:bg-neutral-700" aria-hidden="true" />
+
+            <ThemeToggle />
           </nav>
 
-          {/* MOBILE HAMBURGER */}
-          <button
-            onClick={() => setMobileOpen((v) => !v)}
-            className="md:hidden relative z-10 w-10 h-10 flex flex-col items-center justify-center gap-[5px] rounded-lg hover:bg-white/5 transition-colors"
-            aria-label="Toggle menu"
-          >
-            <motion.span
-              animate={mobileOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.25 }}
-              className="block w-5 h-0.5 bg-white rounded-full origin-center"
-            />
-            <motion.span
-              animate={{ opacity: mobileOpen ? 0 : 1, scaleX: mobileOpen ? 0 : 1 }}
-              transition={{ duration: 0.2 }}
-              className="block w-5 h-0.5 bg-white rounded-full"
-            />
-            <motion.span
-              animate={mobileOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.25 }}
-              className="block w-5 h-0.5 bg-white rounded-full origin-center"
-            />
-          </button>
-        </div>
-      </motion.header>
+          {/* Mobile Right Controls */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
 
-      {/* MOBILE MENU OVERLAY */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            key="mobile-menu"
-            initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
-            animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
-            exit={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="fixed inset-0 z-40 bg-[#0b0f19]/98 backdrop-blur-xl md:hidden flex flex-col items-center justify-center gap-8"
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav-menu"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              className="p-2 rounded-md text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus-visible:outline-2 focus-visible:outline-amber-500"
+            >
+              <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+        </div>
+
+        {/* Mobile Navigation Dropdown */}
+        {mobileMenuOpen && (
+          <nav
+            id="mobile-nav-menu"
+            aria-label="Mobile Navigation"
+            className="md:hidden border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0b0f19] px-6 py-4 space-y-3"
           >
-            {links.map((link, i) => (
-              <motion.div
-                key={link.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 * i + 0.15, duration: 0.35 }}
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-2 text-base font-semibold text-neutral-800 dark:text-neutral-200 hover:text-amber-600 dark:hover:text-amber-400"
               >
-                <Link
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-3xl font-bold text-gray-300 hover:text-yellow-400 transition-colors duration-200"
-                >
-                  {link.label}
-                </Link>
-              </motion.div>
+                {item.label}
+              </Link>
             ))}
-          </motion.div>
+            <a
+              href={cvData.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block py-2 text-base font-semibold text-neutral-800 dark:text-neutral-200 hover:text-amber-600 dark:hover:text-amber-400"
+            >
+              GitHub ↗
+            </a>
+            <a
+              href={cvData.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block py-2 text-base font-semibold text-neutral-800 dark:text-neutral-200 hover:text-amber-600 dark:hover:text-amber-400"
+            >
+              LinkedIn ↗
+            </a>
+          </nav>
         )}
-      </AnimatePresence>
+      </header>
     </>
   );
 }
