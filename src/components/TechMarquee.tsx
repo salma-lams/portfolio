@@ -1,54 +1,53 @@
-"use client";
+import React from "react";
 
-import { motion } from "framer-motion";
-
-const techs = [
-  "React", "Next.js", "TypeScript", "Node.js", "Tailwind CSS",
-  "PostgreSQL", "MongoDB", "Docker", "AWS", "Express.js",
-  "Python", "Git & GitHub", "REST APIs", "Framer Motion",
+// Ordered by relevance, strictly containing CV skills with zero duplicates
+const marqueeSkills = [
+  "React",
+  "TypeScript",
+  "Next.js",
+  "Node.js",
+  "Express.js",
+  "Python",
+  "REST APIs",
+  "PostgreSQL",
+  "MySQL",
+  "MongoDB",
+  "AWS",
+  "Docker",
+  "CI/CD",
+  "OpenAI API",
 ];
 
-function MarqueeStrip({ reverse = false }: { reverse?: boolean }) {
-  const items = [...techs, ...techs]; // duplicate for infinite feel
-
-  return (
-    <div className="flex overflow-hidden select-none">
-      <motion.div
-        animate={{ x: reverse ? ["0%", "50%"] : ["0%", "-50%"] }}
-        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-        className="flex shrink-0 gap-4 pr-4"
-      >
-        {items.map((tech, i) => (
-          <span
-            key={i}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/[0.06] text-sm font-medium text-gray-400 whitespace-nowrap hover:border-yellow-400/40 hover:text-yellow-400 transition-colors duration-300 cursor-default"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-yellow-400/50" />
-            {tech}
-          </span>
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
 export default function TechMarquee() {
-  return (
-    <section className="py-16 bg-[#0b0f19] relative overflow-hidden">
-      {/* Edge fade masks */}
-      <div className="absolute left-0 top-0 bottom-0 w-28 z-10 bg-gradient-to-r from-[#0b0f19] to-transparent pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-28 z-10 bg-gradient-to-l from-[#0b0f19] to-transparent pointer-events-none" />
+  const items = [...marqueeSkills, ...marqueeSkills];
 
-      {/* Top strip label */}
-      <div className="text-center mb-10">
-        <span className="text-xs font-bold tracking-[3px] text-gray-600 uppercase">
-          Technologies I work with
-        </span>
+  return (
+    <section
+      aria-label="Core Technical Skills"
+      className="py-12 border-y border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/30 overflow-hidden"
+    >
+      <div className="max-w-6xl mx-auto px-6 mb-6">
+        <p className="text-xs font-semibold tracking-wider text-neutral-500 uppercase">
+          Core Technologies & Tools
+        </p>
       </div>
 
-      <div className="flex flex-col gap-4">
-        <MarqueeStrip />
-        <MarqueeStrip reverse />
+      <div className="relative w-full overflow-hidden">
+        {/* Edge fade masks */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-neutral-50 dark:from-[#0b0f19] to-transparent" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-neutral-50 dark:from-[#0b0f19] to-transparent" />
+
+        <div className="flex w-max animate-marquee pause-on-hover will-change-transform motion-reduce:transform-none motion-reduce:animate-none">
+          {items.map((skill, index) => (
+            <div
+              key={`${skill}-${index}`}
+              className="inline-flex items-center gap-2.5 mx-3 px-4 py-2 rounded-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-sm font-medium text-neutral-800 dark:text-neutral-200 shadow-xs"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" aria-hidden="true" />
+              <span>{skill}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
