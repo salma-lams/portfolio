@@ -1,11 +1,8 @@
-export type SkillIconComponent = (props: {
-  className?: string;
-  style?: Record<string, string | number>;
-}) => unknown;
+import type { IconType } from "react-icons";
 
 export interface SkillChip {
   readonly name: string;
-  readonly Icon: SkillIconComponent;
+  readonly Icon: IconType;
   readonly iconColor: string;
 }
 
