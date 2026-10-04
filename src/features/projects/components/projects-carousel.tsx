@@ -29,17 +29,21 @@ export function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
     const motionHandler = (e: MediaQueryListEvent) => {
       setPrefersReducedMotion(e.matches);
     };
+
+    const rafId = requestAnimationFrame(() => {
+      checkMobile();
+      setPrefersReducedMotion(mediaQuery.matches);
+    });
+
+    window.addEventListener("resize", checkMobile);
     mediaQuery.addEventListener("change", motionHandler);
 
     return () => {
+      cancelAnimationFrame(rafId);
       window.removeEventListener("resize", checkMobile);
       mediaQuery.removeEventListener("change", motionHandler);
     };

@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { experiencesData } from "../data/experience.data";
 import { educationData, languagesData } from "@/features/education/data/education.data";
-import { siteConfig } from "@/config/site";
 
 export function ExperienceSection() {
   const [showFullTimeline, setShowFullTimeline] = useState(false);

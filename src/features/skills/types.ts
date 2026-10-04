@@ -1,8 +1,11 @@
-import React from "react";
+export type SkillIconComponent = (props: {
+  className?: string;
+  style?: Record<string, string | number>;
+}) => unknown;
 
 export interface SkillChip {
   readonly name: string;
-  readonly Icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  readonly Icon: SkillIconComponent;
   readonly iconColor: string;
 }
 
