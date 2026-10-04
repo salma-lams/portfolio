@@ -1,10 +1,11 @@
 import { MetadataRoute } from "next";
-import { activeProjects } from "@/data/projects";
+import { getProjects } from "@/features/projects/use-cases/get-projects";
+import { siteConfig } from "@/config/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://salma-lamsaaf.vercel.app";
+  const baseUrl = siteConfig.url;
 
-  const projectUrls: MetadataRoute.Sitemap = activeProjects.map((project) => ({
+  const projectUrls: MetadataRoute.Sitemap = getProjects().map((project) => ({
     url: `${baseUrl}/projects/${project.slug}`,
     lastModified: new Date(),
     changeFrequency: "monthly",

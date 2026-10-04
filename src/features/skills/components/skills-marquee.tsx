@@ -1,24 +1,7 @@
 import React from "react";
+import { marqueeSkills } from "../data/skills.data";
 
-// Ordered by relevance, strictly containing CV skills with zero duplicates
-const marqueeSkills = [
-  "React",
-  "TypeScript",
-  "Next.js",
-  "Node.js",
-  "Express.js",
-  "Python",
-  "REST APIs",
-  "PostgreSQL",
-  "MySQL",
-  "MongoDB",
-  "AWS",
-  "Docker",
-  "CI/CD",
-  "OpenAI API",
-];
-
-export default function TechMarquee() {
+export function SkillsMarquee() {
   const items = [...marqueeSkills, ...marqueeSkills];
 
   return (
@@ -33,7 +16,6 @@ export default function TechMarquee() {
       </div>
 
       <div className="relative w-full overflow-hidden">
-        {/* Edge fade masks */}
         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-neutral-50 dark:from-[#0b0f19] to-transparent" />
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-neutral-50 dark:from-[#0b0f19] to-transparent" />
 
@@ -43,7 +25,10 @@ export default function TechMarquee() {
               key={`${skill}-${index}`}
               className="inline-flex items-center gap-2.5 mx-3 px-4 py-2 rounded-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-sm font-medium text-neutral-800 dark:text-neutral-200 shadow-xs"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" aria-hidden="true" />
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-amber-500"
+                aria-hidden="true"
+              />
               <span>{skill}</span>
             </div>
           ))}

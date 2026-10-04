@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import "@/styles/tokens.css";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { cvData } from "@/data/cv";
+import { siteConfig } from "@/config/site";
+import { generatePersonJsonLd } from "@/lib/seo";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -12,15 +14,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://salma-lamsaaf.vercel.app"),
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: "Salma Lamsaaf | Full-Stack Developer",
-    template: "%s | Salma Lamsaaf",
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
   },
-  description:
-    "Portfolio of Salma Lamsaaf, Full-Stack Developer specializing in React, TypeScript, Next.js, and Node.js. Experienced in scalable REST APIs, database design, and modern frontend architectures.",
+  description: siteConfig.description,
   keywords: [
-    "Salma Lamsaaf",
+    siteConfig.name,
     "Full-Stack Developer",
     "Software Engineer",
     "React",
@@ -30,24 +31,22 @@ export const metadata: Metadata = {
     "Python",
     "REST API",
     "PostgreSQL",
-    "Morocco",
+    siteConfig.location,
   ],
-  authors: [{ name: "Salma Lamsaaf", url: "https://github.com/salma-lams" }],
-  creator: "Salma Lamsaaf",
+  authors: [{ name: siteConfig.name, url: siteConfig.social.github }],
+  creator: siteConfig.name,
   openGraph: {
-    title: "Salma Lamsaaf | Full-Stack Developer",
-    description:
-      "Full-Stack Developer portfolio featuring production web apps, REST APIs, and technical background.",
-    url: "https://salma-lamsaaf.vercel.app",
-    siteName: "Salma Lamsaaf Portfolio",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    siteName: `${siteConfig.name} Portfolio`,
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Salma Lamsaaf | Full-Stack Developer",
-    description:
-      "Full-Stack Developer portfolio featuring production web apps, REST APIs, and technical background.",
+    title: siteConfig.title,
+    description: siteConfig.description,
   },
   robots: {
     index: true,
@@ -62,51 +61,24 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLdPerson = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: cvData.name,
-  jobTitle: cvData.title,
-  email: `mailto:${cvData.email}`,
-  telephone: cvData.phone,
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: cvData.location,
-  },
-  sameAs: [cvData.github, cvData.linkedin],
-  knowsAbout: [
-    "React",
-    "Next.js",
-    "TypeScript",
-    "JavaScript",
-    "Node.js",
-    "Express.js",
-    "Python",
-    "REST APIs",
-    "PostgreSQL",
-    "MySQL",
-    "MongoDB",
-    "Docker",
-    "AWS",
-  ],
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const jsonLd = generatePersonJsonLd();
+
   return (
     <html lang="en" className="scroll-smooth dark">
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdPerson) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body
-        className={`${inter.className} min-h-screen bg-white text-neutral-900 dark:bg-[#0b0f19] dark:text-neutral-100 flex flex-col antialiased selection:bg-amber-500/20 selection:text-amber-600 dark:selection:text-amber-400`}
+        className={`${inter.className} min-h-screen bg-[#0D0F12] text-[#F4F1EA] flex flex-col antialiased selection:bg-[#D9A62E]/25 selection:text-[#E8B339]`}
       >
         <Navbar />
-        <main id="main-content" className="flex-1 w-full pt-16">
+        <main id="main-content" className="flex-1 w-full">
           {children}
         </main>
         <Footer />

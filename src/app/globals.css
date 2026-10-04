@@ -2,41 +2,43 @@
 
 @layer base {
   :root {
-    --bg-page: #ffffff;
-    --text-primary: #171717;
-    --text-secondary: #525252;
-    --border-color: #e5e5e5;
-    --card-bg: #fafafa;
-    --accent: #d97706; /* amber-600 */
-    --accent-hover: #b45309;
-  }
-
-  .dark {
-    --bg-page: #0b0f19;
-    --text-primary: #f5f5f5;
-    --text-secondary: #a3a3a3;
-    --border-color: #262626;
-    --card-bg: #111827;
-    --accent: #f59e0b; /* amber-500 */
-    --accent-hover: #d97706;
+    --bg-page: #0D0F12;
+    --text-primary: #F4F1EA;
+    --text-secondary: #8A8F98;
+    --border-color: #22262D;
+    --card-bg: #14171C;
+    --accent: #D9A62E;
+    --accent-hover: #E8B339;
+    --success: #3FAE6A;
   }
 
   body {
-    background-color: var(--bg-page);
-    color: var(--text-primary);
+    background-color: #0D0F12;
+    color: #F4F1EA;
     font-family: inherit;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   html {
     scroll-behavior: smooth;
+    color-scheme: dark;
   }
 
   /* Accessible focus indicators */
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid #D9A62E;
     outline-offset: 2px;
   }
+}
+
+/* Subtle glow utility matching reference */
+.amber-glow {
+  box-shadow: 0 0 60px -15px rgba(217, 166, 46, 0.22);
+}
+
+.amber-glow-sm {
+  box-shadow: 0 0 24px -6px rgba(217, 166, 46, 0.25);
 }
 
 /* Single intentional page-load entrance animation */
@@ -55,24 +57,133 @@
   animation: fadeIn 0.5s ease-out forwards;
 }
 
-/* Marquee animation */
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+/* ── Logo animations ── */
+
+/* Staggered entrance: each bracket char slides+fades in */
+@keyframes logoReveal {
+  from { opacity: 0; transform: translateY(-6px) scale(0.85); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
 }
 
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 35s linear infinite;
+/* The slash pulses with a golden glow on logo hover */
+@keyframes slashPulse {
+  0%, 100% { text-shadow: 0 0 0px rgba(217,166,46,0); }
+  50%       { text-shadow: 0 0 12px rgba(217,166,46,0.9), 0 0 24px rgba(217,166,46,0.4); }
 }
 
-.pause-on-hover:hover {
-  animation-play-state: paused;
+/* Shimmer sweep across the wordmark */
+@keyframes nameShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.logo-bracket {
+  display: inline-block;
+  animation: logoReveal 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.logo-bracket:nth-child(1) { animation-delay: 0ms;   }
+.logo-bracket:nth-child(2) { animation-delay: 80ms;  }
+.logo-bracket:nth-child(3) { animation-delay: 160ms; }
+
+/* Slash glows when parent link is hovered */
+.logo-link:hover .logo-slash {
+  animation: slashPulse 1.2s ease-in-out infinite;
+}
+
+/* Wordmark shimmer on hover */
+.logo-name {
+  background: linear-gradient(
+    90deg,
+    #F4F1EA 0%,
+    #F4F1EA 35%,
+    #D9A62E 50%,
+    #F4F1EA 65%,
+    #F4F1EA 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0s;
+}
+.logo-link:hover .logo-name {
+  animation: nameShimmer 0.8s linear forwards;
+}
+
+/* ── Hero button animations ── */
+
+/* Spring entrance: slides up + fades in from below */
+@keyframes btnReveal {
+  0%   { opacity: 0; transform: translateY(16px) scale(0.96); }
+  70%  { opacity: 1; transform: translateY(-3px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+/* Slow continuous shimmer on the gold button surface */
+@keyframes btnShimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* Arrow icon spring nudge on hover */
+@keyframes arrowNudge {
+  0%   { transform: translate(0, 0); }
+  40%  { transform: translate(3px, -3px); }
+  70%  { transform: translate(1px, -1px); }
+  100% { transform: translate(2px, -2px); }
+}
+
+/* Primary CTA button — amber with shimmer */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    110deg,
+    #D9A62E 0%,
+    #E8B339 40%,
+    #F0C050 50%,
+    #E8B339 60%,
+    #D9A62E 100%
+  );
+  background-size: 250% auto;
+  animation:
+    btnReveal 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+    btnShimmer 3.5s linear 1.2s infinite;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(217, 166, 46, 0.45);
+}
+.btn-primary:active {
+  transform: translateY(0px);
+}
+.btn-primary .btn-arrow {
+  display: inline-block;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.btn-primary:hover .btn-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* Secondary CTA button — outline with animated border on hover */
+.btn-secondary {
+  position: relative;
+  animation: btnReveal 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+  transition: transform 0.18s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.btn-secondary:hover {
+  transform: translateY(-2px);
+}
+.btn-secondary:active {
+  transform: translateY(0px);
+}
+.btn-secondary .btn-icon {
+  display: inline-block;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.btn-secondary:hover .btn-icon {
+  transform: translateY(3px);
 }
 
 /* Strict prefers-reduced-motion compliance */
@@ -86,14 +197,37 @@
     scroll-behavior: auto !important;
   }
 
-  .animate-marquee {
-    animation: none !important;
-    transform: none !important;
-    overflow-x: auto;
-  }
-
   .animate-fade-in {
     animation: none !important;
+    transform: none !important;
+  }
+
+  .logo-bracket {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .logo-link:hover .logo-slash {
+    animation: none !important;
+    text-shadow: none !important;
+  }
+  .logo-link:hover .logo-name {
+    animation: none !important;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .btn-primary:hover,
+  .btn-secondary:hover {
+    transform: none !important;
+  }
+  .btn-primary .btn-arrow,
+  .btn-secondary .btn-icon {
+    transition: none !important;
     transform: none !important;
   }
 }

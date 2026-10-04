@@ -2,21 +2,26 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { ProjectImage } from "@/data/projects";
+import { ProjectImage } from "../types";
 
-interface ProjectGalleryProps {
-  images: ProjectImage[];
+export interface ProjectGalleryProps {
+  images: readonly ProjectImage[];
   projectTitle: string;
 }
 
-export default function ProjectGallery({ images, projectTitle }: ProjectGalleryProps) {
+export function ProjectGallery({ images, projectTitle }: ProjectGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   if (!images || images.length === 0) {
     return (
       <div className="p-8 sm:p-12 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 text-center space-y-3">
         <div className="w-12 h-12 mx-auto rounded-md bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center text-neutral-600 dark:text-neutral-400">
-          <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+          <svg
+            className="w-6 h-6 stroke-current"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+          >
             <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
             <circle cx="9" cy="9" r="2" />
             <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
@@ -32,10 +37,15 @@ export default function ProjectGallery({ images, projectTitle }: ProjectGalleryP
     );
   }
 
-  const currentImage = images[selectedIndex];
+  const currentImage = images[selectedIndex] ?? images[0];
+  if (!currentImage) return null;
 
   return (
-    <div className="space-y-4" role="region" aria-label={`${projectTitle} screenshot gallery`}>
+    <div
+      className="space-y-4"
+      role="region"
+      aria-label={`${projectTitle} screenshot gallery`}
+    >
       {/* Main Viewport */}
       <div className="relative w-full aspect-16/9 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 overflow-hidden shadow-xs">
         <Image
@@ -55,10 +65,17 @@ export default function ProjectGallery({ images, projectTitle }: ProjectGalleryP
         </p>
 
         {images.length > 1 && (
-          <div className="flex items-center gap-2 shrink-0" aria-label="Gallery controls">
+          <div
+            className="flex items-center gap-2 shrink-0"
+            aria-label="Gallery controls"
+          >
             <button
               type="button"
-              onClick={() => setSelectedIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))}
+              onClick={() =>
+                setSelectedIndex((prev) =>
+                  prev > 0 ? prev - 1 : images.length - 1
+                )
+              }
               className="px-3 py-1.5 rounded border border-neutral-300 dark:border-neutral-700 text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors"
               aria-label="Previous image"
             >
@@ -69,7 +86,11 @@ export default function ProjectGallery({ images, projectTitle }: ProjectGalleryP
             </span>
             <button
               type="button"
-              onClick={() => setSelectedIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))}
+              onClick={() =>
+                setSelectedIndex((prev) =>
+                  prev < images.length - 1 ? prev + 1 : 0
+                )
+              }
               className="px-3 py-1.5 rounded border border-neutral-300 dark:border-neutral-700 text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors"
               aria-label="Next image"
             >
@@ -81,7 +102,11 @@ export default function ProjectGallery({ images, projectTitle }: ProjectGalleryP
 
       {/* Thumbnails if multiple images */}
       {images.length > 1 && (
-        <div className="flex gap-3 overflow-x-auto pt-2 pb-1" role="tablist" aria-label="Thumbnail selection">
+        <div
+          className="flex gap-3 overflow-x-auto pt-2 pb-1"
+          role="tablist"
+          aria-label="Thumbnail selection"
+        >
           {images.map((img, idx) => (
             <button
               key={idx}

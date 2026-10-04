@@ -1,15 +1,15 @@
-import HeroSection from "@/components/HeroSection";
-import TechMarquee from "@/components/TechMarquee";
-import AboutSection from "@/components/AboutSection";
-import ProjectsSection from "@/components/ProjectsSection";
-import ContactSection from "@/components/ContactSection";
+import { HeroSection } from "@/features/hero/components/hero-section";
+import { ExperienceSection } from "@/features/experience/components/experience-section";
+import { SkillsSection } from "@/features/skills/components/skills-section";
+import { ProjectsSection } from "@/features/projects/components/projects-section";
+import { ContactSection } from "@/features/contact/components/contact-section";
 
 export default function Home() {
   return (
     <>
       <HeroSection />
-      <TechMarquee />
-      <AboutSection />
+      <ExperienceSection />
+      <SkillsSection />
       <ProjectsSection />
       <ContactSection />
     </>
